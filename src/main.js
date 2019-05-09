@@ -4,13 +4,17 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import moment from 'moment'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/index.css'
 import Httptool from '@/plugins/http.js'
 
 Vue.use(Httptool)
 Vue.use(ElementUI)
-
+    // 过滤器
+Vue.filter('fmtDate', function(v) {
+    return moment(v).format('YYYY-MM-DD');
+})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
