@@ -2,11 +2,12 @@
     <!-- 卡片容器 -->
     <el-card>
          <!-- 面包屑 -->
-         <el-breadcrumb separator="/">
+         <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>用户管理</el-breadcrumb-item>
             <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <my-bread level1="用户管理" level2="用户列表"></my-bread>
         <!-- 搜索框 -->
        <el-row>
         <el-col :span="24" class="searchArea">
@@ -177,10 +178,11 @@ export default {
         async loadTableData(){
         this.loading=true;
              // 需要设置请求头 Authorization = token
-        const AUTH_TOKEN = sessionStorage.getItem('token')
-        this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
+        // const AUTH_TOKEN = sessionStorage.getItem('token')
+        // // 通过axios请求的defauits给它设置一个权限为token
+        // this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
         const res = await this.$http.get(`users?pagenum=${this.pagenum}&pagesize=${this.pagesize}&query=${this.searchVal}`)
-        // console.log(res)
+        console.log(res)
         if(res.status==200){
             this.loading=false;
             this.list=res.data.data.users;
@@ -282,7 +284,10 @@ export default {
              this.dialogFormVisibleRoleuser=false;
             //  const res = await this.$http.put(`users/${ this.getRoleByUserId}/role/${this.currRoleId}`);
              const res = await this.$http.put(`users/${this.getRoleByUserId}/role`, {rid: this.currRoleId})
-             console.log(res);
+            //  console.log(res);
+             if(res.data.meta.status==200){
+                 this.$message.success(res.data.meta.msg);
+             }
         }
 
     },
