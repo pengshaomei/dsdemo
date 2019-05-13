@@ -11,53 +11,59 @@ class="login-form">
     <el-form-item label="密码">
         <el-input v-model="formdata.password"></el-input>
     </el-form-item>
-      <el-button
+      <el-button @click="handleLogin()"
       type="primary"
       class="login-button"
-      @click="handleLogin"
       >登录</el-button>
 </el-form>
 </div>
 </template>
+
 <script>
 export default {
-    data(){
-        return{
-            formdata:{
-                username:'',
-                password:''
-            }
-        }
-    },
-   methods: {
-        async handleLogin(){
-        //    发送表单请求
-        const res=await this.$http.post('login',this.formdata);
-         const result=res.data;
-            if(result.meta.status==200){
-                const token=result.data.token;
-                sessionStorage.setItem('token',token);
-                this.$message.success(result.meta.msg);
-                this.$router.push({name:'home'});
-            }else{
-                this.$message.error(result.meta.msg);
-            }
-       }
-    //    handleLogin(){
-    //     //    发送表单请求
-    //     this.$http.post('login',this.formdata)
-    //     .then((res)=>{
-    //         // console.log(res)
-    //         const result=res.data;
-    //         if(result.meta.status==200){
-    //             this.$message.success(result.meta.msg);
-    //             this.$router.push({name:'home'});
-    //         }else{
-    //             this.$message.error(result.meta.msg);
-    //         }
-    //     })
-    //    }
-   },
+  data () {
+    return {
+      formdata: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    async handleLogin () {
+      const res = await this.$http.post('login', this.formdata)
+      const { meta } = res.data
+      if (meta.status === 200) {
+        // sessionStorage
+      // 保存token值
+        const token = res.data.data.token
+        sessionStorage.setItem('token', token)
+
+        this.$message.success(meta.msg)
+        this.$router.push({ name: 'home' })
+      } else {
+        this.$message.error(meta.msg)
+      }
+    }
+
+    // handleLogin(){
+    //   // 获取表单数据 this.formdata
+    //   // 发送post
+    //   this.$http.post('login',this.formdata)
+    //   .then((res)=>{
+    //     console.log(res)//
+    //     const {meta} = res.data
+    //     if (meta.status===200) {
+    //       this.$message.success(meta.msg);
+    //       // 跳转
+    //       this.$router.push({name:'home'})
+    //     } else {
+    //       // 提示框 meta.msg
+    //         this.$message.error(meta.msg);
+    //     }
+    //   })
+    // }
+  }
 }
 </script>
 
@@ -79,12 +85,5 @@ export default {
 
 .login-wrap .login-form .login-button {
   width: 100%;
-}
-html,
-body,
-h2 {
-    height: 100%;
-    padding: 0;
-    margin: 0;
 }
 </style>
